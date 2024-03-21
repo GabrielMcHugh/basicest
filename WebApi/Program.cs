@@ -1,25 +1,50 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Data;
 using Microsoft.Extensions.DependencyInjection;
+using WebApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<BlogContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("BlogContext") ?? throw new InvalidOperationException("Connection string 'BlogContext' not found.")));
 
-// Add services to the container.
-var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+if (builder.Environment.IsDevelopment())
+{
+    var connection = "DevelopmentBlogContext";
+    builder.Services.AddDbContext<BlogContext>(
+        options =>
+            options.UseSqlite(
+                builder.Configuration.GetConnectionString(connection)
+                    ?? throw new InvalidOperationException(
+                        $"Connection string {connection} not found."
+                    )
+            )
+    );
+}
+else
+{
+    var connection = "ProductionBlogContext";
+    builder.Services.AddDbContext<BlogContext>(
+        options =>
+            options.UseSqlServer(
+                builder.Configuration.GetConnectionString(connection)
+                    ?? throw new InvalidOperationException(
+                        $"Connection string {connection} not found."
+                    )
+            )
+    );
+}
 
-builder
-    .Services.AddDefaultIdentity<IdentityUser>(
-        options => options.SignIn.RequireConfirmedAccount = true
-    )
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+// // Add services to the container.
+// var connectionString =
+//     builder.Configuration.GetConnectionString("DefaultConnection")
+//     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// builder
+//     .Services.AddDefaultIdentity<IdentityUser>(
+//         options => options.SignIn.RequireConfirmedAccount = true
+//     )
+//     .AddEntityFrameworkStores<ApplicationDbContext>();
+// builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
