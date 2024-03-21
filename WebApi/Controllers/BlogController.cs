@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -5,14 +6,16 @@ namespace WebApi.Controllers;
 public class BlogController : Controller
 {
     // GET: /Blog/
-    public string Index()
+    public IActionResult Index()
     {
-        return "This is my default action";
+        return View();
     }
 
     // GET: /Blog/Welcome/
-    public string Welcome()
+    public IActionResult Welcome(string name, int numTimes = 1)
     {
-        return "This is the welcome action";
+        ViewData["Message"] = "Hello " + name;
+        ViewData["NumTimes"] = numTimes;
+        return View();
     }
 }

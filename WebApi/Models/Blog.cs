@@ -1,6 +1,6 @@
 namespace WebApi.Models;
 
-public class BlogModel
+public class Blog
 {
     public int Id { get; set; }
     public Guid MyProperty { get; set; }
