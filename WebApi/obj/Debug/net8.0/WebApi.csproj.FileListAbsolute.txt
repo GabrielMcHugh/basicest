@@ -136,3 +136,4 @@ C:\Directory\Personal Projects\DotNet-Apps\basicblg\WebApi\obj\Debug\net8.0\refi
 C:\Directory\Personal Projects\DotNet-Apps\basicblg\WebApi\obj\Debug\net8.0\WebApi.pdb
 C:\Directory\Personal Projects\DotNet-Apps\basicblg\WebApi\obj\Debug\net8.0\WebApi.genruntimeconfig.cache
 C:\Directory\Personal Projects\DotNet-Apps\basicblg\WebApi\obj\Debug\net8.0\ref\WebApi.dll
+C:\Directory\Personal Projects\DotNet-Apps\basicblg\WebApi\obj\Debug\net8.0\WebApi.sourcelink.json
