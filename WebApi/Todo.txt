@@ -1,0 +1,5 @@
+1. Where does getConnectionString get its configuration from? When it's in development does it know to draw form the Development json?
+Because thats where I put yje development connection string.
+
+2. Im Setting up the DB Context for the Blog, but I already have a dbConext for the Application (from the --auth flag on the creation of the 
+app. Is it better to reconcile these? What is a DB context first of all and why am I using them for here? How would I go about doing that?)
