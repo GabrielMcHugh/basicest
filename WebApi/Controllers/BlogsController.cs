@@ -20,9 +20,27 @@ namespace WebApi.Controllers
         }
 
         // GET: Blogs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Blog.ToListAsync());
+            if (_context.Blog == null)
+            {
+                return Problem("Entity set 'MvcBlogContext.Blog is null.");
+            }
+
+            var blog = from b in _context.Blog select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                blog = blog.Where(s => s.Content!.Contains(searchString));
+                Console.WriteLine(DateTime.Now);
+            }
+            return View(await blog.ToListAsync());
+        }
+
+        [HttpPost]
+        public string Index(string searchString, bool notUsed)
+        {
+            return "From [HttpPost]Index: filter on " + searchString;
         }
 
         // GET: Blogs/Details/5
@@ -33,8 +51,7 @@ namespace WebApi.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blog
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var blog = await _context.Blog.FirstOrDefaultAsync(m => m.Id == id);
             if (blog == null)
             {
                 return NotFound();
@@ -54,7 +71,9 @@ namespace WebApi.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MyProperty,Title,Content,Created_date,Last_updated_date")] Blog blog)
+        public async Task<IActionResult> Create(
+            [Bind("Id,MyProperty,Title,Content,Created_date,Last_updated_date")] Blog blog
+        )
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +105,10 @@ namespace WebApi.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MyProperty,Title,Content,Created_date,Last_updated_date")] Blog blog)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,MyProperty,Title,Content,Created_date,Last_updated_date")] Blog blog
+        )
         {
             if (id != blog.Id)
             {
@@ -124,8 +146,7 @@ namespace WebApi.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blog
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var blog = await _context.Blog.FirstOrDefaultAsync(m => m.Id == id);
             if (blog == null)
             {
                 return NotFound();

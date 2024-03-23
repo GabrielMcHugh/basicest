@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace WebApi.Models;
 
 public class Blog
 {
     public int Id { get; set; }
+
+    [Display(Name = "My Property")]
     public Guid? MyProperty { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
