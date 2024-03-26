@@ -10,6 +10,7 @@ public class Blog
     public Guid? MyProperty { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
+    public string Genre { get; set; }
     public DateTimeOffset? Created_date { get; set; }
     public DateTimeOffset? Last_updated_date { get; set; }
 }
