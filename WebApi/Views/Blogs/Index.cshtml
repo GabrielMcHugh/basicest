@@ -1,4 +1,4 @@
-@model IEnumerable<WebApi.Models.Blog>
+@model WebApi.Models.BlogGenreViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -11,39 +11,49 @@
 </p>
 <form asp-controller="Blogs" asp-action="Index" method="get">
     <p>
-        Title: <input type="text" name="SearchString" />
-        <input type="submit" value="Filter" />
+        <select asp-for="BlogGenre" asp-items="Model.Genres">
+            <option value="">All</option>
+        </select>
+
+        Title: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter">
     </p>
 </form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MyProperty)
+                @Html.DisplayNameFor(model => model.Blogs![0].MyProperty)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Blogs![0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Content)
+                @Html.DisplayNameFor(model => model.Blogs![0].Genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Created_date)
+                @Html.DisplayNameFor(model => model.Blogs![0].Content)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Last_updated_date)
+                @Html.DisplayNameFor(model => model.Blogs![0].Created_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Blogs![0].Last_updated_date)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Blogs!) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.MyProperty)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Content)

@@ -20,21 +20,38 @@ namespace WebApi.Controllers
         }
 
         // GET: Blogs
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string blogGenre, string searchString)
         {
             if (_context.Blog == null)
             {
                 return Problem("Entity set 'MvcBlogContext.Blog is null.");
             }
 
+            // Use LINQ to get list of genres.
+            IQueryable<string> genreQuery =
+                from m in _context.Blog
+                orderby m.Content
+                select m.Content;
+
             var blog = from b in _context.Blog select b;
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 blog = blog.Where(s => s.Content!.Contains(searchString));
-                Console.WriteLine(DateTime.Now);
             }
-            return View(await blog.ToListAsync());
+
+            if (!string.IsNullOrEmpty(blogGenre))
+            {
+                blog = blog.Where(x => x.Genre == blogGenre);
+            }
+
+            var blogGenreVM = new BlogGenreViewModel
+            {
+                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Blogs = await blog.ToListAsync()
+            };
+
+            return View(blogGenreVM);
         }
 
         [HttpPost]
@@ -72,7 +89,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,MyProperty,Title,Content,Created_date,Last_updated_date")] Blog blog
+            [Bind("Id,MyProperty,Title,Genre, Content,Created_date,Last_updated_date")] Blog blog
         )
         {
             if (ModelState.IsValid)
